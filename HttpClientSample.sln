@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClientSample", "HttpClientSample\HttpClientSample.csproj", "{F5EB24C8-6093-497E-8E56-25494F88527D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokenApi", "BrokenApi\BrokenApi.csproj", "{D484B277-E9CA-499C-A864-BA306D50603C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5EB24C8-6093-497E-8E56-25494F88527D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5EB24C8-6093-497E-8E56-25494F88527D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5EB24C8-6093-497E-8E56-25494F88527D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5EB24C8-6093-497E-8E56-25494F88527D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D484B277-E9CA-499C-A864-BA306D50603C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D484B277-E9CA-499C-A864-BA306D50603C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D484B277-E9CA-499C-A864-BA306D50603C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D484B277-E9CA-499C-A864-BA306D50603C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E455F9E3-C415-4F52-896A-83DEDADDEB9F}
+	EndGlobalSection
+EndGlobal
