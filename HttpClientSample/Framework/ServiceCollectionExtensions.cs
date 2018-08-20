@@ -51,16 +51,15 @@
                 .Configure<TClientOptions>(configuration.GetSection(configurationSectionName))
                 .AddTransient<CorrelationIdDelegatingHandler>()
                 .AddTransient<UserAgentDelegatingHandler>()
-                .AddHttpClient<TClient, TImplementation>(
-                    options =>
-                    {
-                        var httpClientOptions = services
-                            .BuildServiceProvider()
-                            .GetRequiredService<IOptions<TClientOptions>>()
-                            .Value;
-                        options.BaseAddress = httpClientOptions.BaseAddress;
-                        options.Timeout = httpClientOptions.Timeout;
-                    })
+                .AddHttpClient<TClient, TImplementation>()
+                .ConfigureHttpClient((sp, options) =>
+                {
+                    var httpClientOptions = sp
+                        .GetRequiredService<IOptions<TClientOptions>>()
+                        .Value;
+                    options.BaseAddress = httpClientOptions.BaseAddress;
+                    options.Timeout = httpClientOptions.Timeout;
+                })
                 .ConfigurePrimaryHttpMessageHandler(x => new DefaultHttpClientHandler())
                 .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
                 .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker)
