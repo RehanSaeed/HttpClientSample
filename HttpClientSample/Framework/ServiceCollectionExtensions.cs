@@ -1,12 +1,12 @@
-﻿namespace HttpClientSample.Framework
+namespace HttpClientSample.Framework
 {
     using System;
+    using HttpClientSample.Options;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
     using Polly;
     using Polly.Extensions.Http;
-    using HttpClientSample.Options;
 
     public static class ServiceCollectionExtensions
     {
@@ -17,9 +17,8 @@
             IConfiguration configuration,
             string configurationSectionName = PoliciesConfigurationSectionName)
         {
-            var section = configuration.GetSection(configurationSectionName);
             services.Configure<PolicyOptions>(configuration);
-            var policyOptions = section.Get<PolicyOptions>();
+            var policyOptions = configuration.GetSection(configurationSectionName).Get<PolicyOptions>();
 
             var policyRegistry = services.AddPolicyRegistry();
             policyRegistry.Add(
@@ -52,14 +51,15 @@
                 .AddTransient<CorrelationIdDelegatingHandler>()
                 .AddTransient<UserAgentDelegatingHandler>()
                 .AddHttpClient<TClient, TImplementation>()
-                .ConfigureHttpClient((sp, options) =>
-                {
-                    var httpClientOptions = sp
-                        .GetRequiredService<IOptions<TClientOptions>>()
-                        .Value;
-                    options.BaseAddress = httpClientOptions.BaseAddress;
-                    options.Timeout = httpClientOptions.Timeout;
-                })
+                .ConfigureHttpClient(
+                    (serviceProvider, httpClient) =>
+                    {
+                        var httpClientOptions = serviceProvider
+                            .GetRequiredService<IOptions<TClientOptions>>()
+                            .Value;
+                        httpClient.BaseAddress = httpClientOptions.BaseAddress;
+                        httpClient.Timeout = httpClientOptions.Timeout;
+                    })
                 .ConfigurePrimaryHttpMessageHandler(x => new DefaultHttpClientHandler())
                 .AddPolicyHandlerFromRegistry(PolicyName.HttpRetry)
                 .AddPolicyHandlerFromRegistry(PolicyName.HttpCircuitBreaker)
