@@ -48,8 +48,8 @@ namespace HttpClientSample.Framework
             where TClientOptions : HttpClientOptions, new() =>
             services
                 .Configure<TClientOptions>(configuration.GetSection(configurationSectionName))
-                .AddTransient<CorrelationIdDelegatingHandler>()
-                .AddTransient<UserAgentDelegatingHandler>()
+                .AddSingleton<CorrelationIdDelegatingHandler>()
+                .AddSingleton<UserAgentDelegatingHandler>()
                 .AddHttpClient<TClient, TImplementation>()
                 .ConfigureHttpClient(
                     (serviceProvider, httpClient) =>

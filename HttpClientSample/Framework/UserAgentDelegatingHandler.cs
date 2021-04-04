@@ -17,12 +17,7 @@ namespace HttpClientSample.Framework
         }
 
         public UserAgentDelegatingHandler(Assembly assembly)
-            : this(new AssemblyInformation(assembly))
-        {
-        }
-
-        public UserAgentDelegatingHandler(AssemblyInformation assemblyInformation)
-           : this(assemblyInformation.Product, assemblyInformation.Version)
+            : this(GetProduct(assembly), GetVersion(assembly))
         {
         }
 
@@ -66,5 +61,11 @@ namespace HttpClientSample.Framework
 
             return base.SendAsync(request, cancellationToken);
         }
+
+        private static string GetProduct(Assembly assembly) =>
+            assembly.GetCustomAttribute<AssemblyProductAttribute>().Product;
+
+        private static string GetVersion(Assembly assembly) =>
+            assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
     }
 }
