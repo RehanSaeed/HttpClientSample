@@ -1,14 +1,15 @@
-﻿namespace HttpClientSample
+namespace HttpClientSample
 {
     using CorrelationId;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
+    using CorrelationId.DependencyInjection;
     using HttpClientSample.Clients;
     using HttpClientSample.Framework;
     using HttpClientSample.Options;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
 
     public class Startup
     {
@@ -16,29 +17,27 @@
 
         public Startup(IConfiguration configuration) => this.configuration = configuration;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddCorrelationId();
+        public void ConfigureServices(IServiceCollection services) =>
             services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddDefaultCorrelationId()
+                .AddControllers()
                 .Services
                 .AddPolicies(this.configuration)
                 .AddHttpClient<IRocketClient, RocketClient, RocketClientOptions>(
                     this.configuration,
                     nameof(ApplicationOptions.RocketClient));
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
         {
-            app.UseCorrelationId();
-            if (env.IsDevelopment())
+            if (environment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                application.UseDeveloperExceptionPage();
             }
-            app.UseMvc();
+
+            application
+                .UseCorrelationId()
+                .UseRouting()
+                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

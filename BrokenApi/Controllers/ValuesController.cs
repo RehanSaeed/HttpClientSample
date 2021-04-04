@@ -1,6 +1,7 @@
-﻿namespace BrokenApi.Controllers
+namespace BrokenApi.Controllers
 {
     using System.Threading.Tasks;
+    using BrokenApi.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@
             this.logger.LogDebug("X-Correlation-ID: {0}", this.Request.Headers["X-Correlation-ID"]);
             this.logger.LogDebug("User-Agent: {0}", this.Request.Headers["User-Agent"]);
             await Task.Delay(1000);
-            return new StatusCodeResult(500);
+            return this.StatusCode(500, new TakeoffStatus() { Status = "Takeoff Failed" });
         }
 
         [HttpGet("/status-working")]
@@ -26,7 +27,7 @@
             this.logger.LogDebug("X-Correlation-ID: {0}", this.Request.Headers["X-Correlation-ID"]);
             this.logger.LogDebug("User-Agent: {0}", this.Request.Headers["User-Agent"]);
             await Task.Delay(1000);
-            return new StatusCodeResult(200);
+            return this.Ok(new TakeoffStatus() { Status = "Takeoff Successful" });
         }
     }
 }

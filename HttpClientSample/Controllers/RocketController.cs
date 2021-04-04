@@ -1,6 +1,5 @@
-﻿namespace HttpClientSample.Controllers
+namespace HttpClientSample.Controllers
 {
-    using System;
     using System.Threading.Tasks;
     using HttpClientSample.Clients;
     using HttpClientSample.Models;
@@ -15,16 +14,6 @@
         public RocketController(IRocketClient rocketClient) => this.rocketClient = rocketClient;
 
         [HttpGet("takeoff")]
-        public async Task<ActionResult<TakeoffStatus>> Takeoff(bool working = false)
-        {
-            try
-            {
-                return await this.rocketClient.GetStatus(working);
-            }
-            catch (Exception exception)
-            {
-                return new TakeoffStatus() { Status = exception.ToString() };
-            }
-        }
+        public Task<TakeoffStatus> Takeoff(bool working = false) => this.rocketClient.GetStatus(working);
     }
 }

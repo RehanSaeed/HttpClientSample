@@ -1,6 +1,7 @@
-﻿namespace HttpClientSample.Clients
+namespace HttpClientSample.Clients
 {
     using System.Net.Http;
+    using System.Net.Http.Json;
     using System.Threading.Tasks;
     using HttpClientSample.Models;
 
@@ -14,7 +15,7 @@
         {
             var response = await this.httpClient.GetAsync(working ? "status-working" : "status-failing");
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsAsync<TakeoffStatus>();
+            return await response.Content.ReadFromJsonAsync<TakeoffStatus>();
         }
     }
 }

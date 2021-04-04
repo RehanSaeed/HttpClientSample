@@ -1,4 +1,4 @@
-﻿namespace HttpClientSample.Framework
+namespace HttpClientSample.Framework
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,12 @@
         }
 
         public UserAgentDelegatingHandler(Assembly assembly)
-            : this(GetProduct(assembly), GetVersion(assembly))
+            : this(new AssemblyInformation(assembly))
+        {
+        }
+
+        public UserAgentDelegatingHandler(AssemblyInformation assemblyInformation)
+           : this(assemblyInformation.Product, assemblyInformation.Version)
         {
         }
 
@@ -60,31 +65,6 @@
             // Else the header has already been added due to a retry.
 
             return base.SendAsync(request, cancellationToken);
-        }
-
-        private static string GetProduct(Assembly assembly) => GetAttributeValue<AssemblyProductAttribute>(assembly);
-
-        private static string GetVersion(Assembly assembly)
-        {
-            var infoVersion = GetAttributeValue<AssemblyInformationalVersionAttribute>(assembly);
-            if (infoVersion != null)
-            {
-                return infoVersion;
-            }
-
-            return GetAttributeValue<AssemblyFileVersionAttribute>(assembly);
-        }
-
-        private static string GetAttributeValue<T>(Assembly assembly)
-            where T : Attribute
-        {
-            var type = typeof(T);
-            var attribute = assembly
-                .CustomAttributes
-                .Where(x => x.AttributeType == type)
-                .Select(x => x.ConstructorArguments.FirstOrDefault())
-                .FirstOrDefault();
-            return attribute == null ? string.Empty : attribute.Value.ToString();
         }
     }
 }
