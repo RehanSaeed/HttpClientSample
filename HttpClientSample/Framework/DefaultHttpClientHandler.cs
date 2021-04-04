@@ -6,6 +6,6 @@ namespace HttpClientSample.Framework
     public class DefaultHttpClientHandler : HttpClientHandler
     {
         public DefaultHttpClientHandler() =>
-            this.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.Brotli;
+            this.AutomaticDecompression = DecompressionMethods.Brotli | DecompressionMethods.Deflate | DecompressionMethods.GZip;
     }
 }
